@@ -1,0 +1,9 @@
+spring:
+  h2.console:
+    enabled: true
+    path: /consolehandi
+  datasource:
+    url: jdbc:h2:file:C:/Users/Seweryn/Projekty/HANDIPRO/dbHANDI
+  jpa:
+    hibernate:
+      ddl-auto: update
