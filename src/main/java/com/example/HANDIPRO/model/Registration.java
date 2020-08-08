@@ -12,7 +12,7 @@ public class Registration {
     private int id;
     private String name;
     private String surname;
-    @Email
+    @Email(message = "Provide Valid Email")
     @Column(unique = true)
     private String email;
     private String password;

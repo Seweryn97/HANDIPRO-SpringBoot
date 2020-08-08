@@ -14,4 +14,6 @@ public interface RegistrationRepository {
 
     Registration save(Registration Entity);
 
+    Registration findByEmail(String email);
+
 }

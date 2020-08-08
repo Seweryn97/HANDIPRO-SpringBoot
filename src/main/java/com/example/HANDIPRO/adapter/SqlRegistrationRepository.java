@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SqlRegistrationRepository extends RegistrationRepository, JpaRepository<Registration,Integer> {
+
+    @Override
+    Registration findByEmail(String email);
 }
