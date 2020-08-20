@@ -1,14 +1,16 @@
-package com.example.HANDIPRO.model;
+package com.example.HANDIPRO.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Set;
 
 @Entity
-@Table (name = "registration")
-public class Registration {
+@Table (name = "physiotherapist")
+public class Physiotherapist {
 
-    @Id @GeneratedValue (strategy = GenerationType.AUTO)
+    @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String surname;
@@ -17,10 +19,10 @@ public class Registration {
     private String email;
     private String password;
     private String repeatedpassword;
-    private boolean confirmedemail;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "physiotherapist", fetch = FetchType.LAZY)
+    private Set<Patient> patients;
 
-
-    Registration(){
+    public Physiotherapist(){
 
     }
 
@@ -72,11 +74,12 @@ public class Registration {
         this.repeatedpassword = repeatedpassword;
     }
 
-    public boolean isConfirmedemail() {
-        return confirmedemail;
+    @JsonManagedReference
+    public Set<Patient> getPatients() {
+        return patients;
     }
 
-    public void setConfirmedemail(boolean confirmedemail) {
-        this.confirmedemail = confirmedemail;
+    public void setPatients(Set<Patient> patients) {
+        this.patients = patients;
     }
 }
