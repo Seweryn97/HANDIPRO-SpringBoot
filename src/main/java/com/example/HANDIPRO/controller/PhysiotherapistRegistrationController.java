@@ -1,15 +1,15 @@
-
 package com.example.HANDIPRO.controller;
 
+import com.example.HANDIPRO.models.DTO.PhysiotherapistReadDTO;
 import com.example.HANDIPRO.models.Physiotherapist;
 import com.example.HANDIPRO.Repositories.PhysiotherapistRegistrationRepository;
-import com.example.HANDIPRO.services.VerifyEmailSender;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -25,8 +25,15 @@ public class PhysiotherapistRegistrationController {
     }
 
     @GetMapping(path ="/register/physiotherapist" , params ={"!sort","!page","!size"})
-    ResponseEntity<List<Physiotherapist>> readAllRegister(){
-        return ResponseEntity.ok(physioterapistRegistrationRepository.findAll());
+    ResponseEntity<List<PhysiotherapistReadDTO>> readAllRegister(){
+        List<Physiotherapist> physiotherapists = physioterapistRegistrationRepository.findAll();
+        List<PhysiotherapistReadDTO> physiotherapistReadDTO= new ArrayList<>();
+
+        Iterator<Physiotherapist> iterator = physiotherapists.iterator();
+        iterator.forEachRemaining(physiotherapist -> {
+            physiotherapistReadDTO.add(new PhysiotherapistReadDTO(physiotherapist));
+        });
+        return ResponseEntity.ok(physiotherapistReadDTO);
     }
 
     @PostMapping(path = "/register/physiotherapist")

@@ -18,7 +18,7 @@ public class Patient {
     private String email;
     private String password;
     private String repeatedpassword;
-    @ManyToOne
+    @ManyToOne //(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "physiotherapist_id")
     private Physiotherapist physiotherapist;
 
