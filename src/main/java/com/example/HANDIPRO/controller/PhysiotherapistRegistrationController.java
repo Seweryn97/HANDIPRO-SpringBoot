@@ -3,6 +3,8 @@ package com.example.HANDIPRO.controller;
 import com.example.HANDIPRO.models.DTO.PhysiotherapistReadDTO;
 import com.example.HANDIPRO.models.Physiotherapist;
 import com.example.HANDIPRO.Repositories.PhysiotherapistRegistrationRepository;
+import com.example.HANDIPRO.services.PhysiotherapistService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,9 @@ import java.util.List;
 public class PhysiotherapistRegistrationController {
 
     private final PhysiotherapistRegistrationRepository physioterapistRegistrationRepository;
+
+    @Autowired
+    private PhysiotherapistService physiotherapistDTOService;
 
    /* @Autowired
     private VerifyEmailSender verifyEmailSender;*/
@@ -31,7 +36,7 @@ public class PhysiotherapistRegistrationController {
 
         Iterator<Physiotherapist> iterator = physiotherapists.iterator();
         iterator.forEachRemaining(physiotherapist -> {
-            physiotherapistReadDTO.add(new PhysiotherapistReadDTO(physiotherapist));
+            physiotherapistReadDTO.add(physiotherapistDTOService.readPhysiotherapist(physiotherapist));
         });
         return ResponseEntity.ok(physiotherapistReadDTO);
     }
