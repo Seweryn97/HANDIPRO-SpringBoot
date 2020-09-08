@@ -74,7 +74,6 @@ public class Physiotherapist {
         this.repeatedpassword = repeatedpassword;
     }
 
-    @JsonManagedReference
     public Set<Patient> getPatients() {
         return patients;
     }

@@ -4,6 +4,7 @@ import com.example.HANDIPRO.models.DTO.PhysiotherapistReadDTO;
 import com.example.HANDIPRO.models.Physiotherapist;
 import com.example.HANDIPRO.Repositories.PhysiotherapistRegistrationRepository;
 import com.example.HANDIPRO.services.PhysiotherapistService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,14 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class PhysiotherapistRegistrationController {
 
     private final PhysiotherapistRegistrationRepository physioterapistRegistrationRepository;
+    //private final Logger logger = (Logger) LoggerFactory.getLogger(PhysiotherapistRegistrationRepository.class);
+
 
     @Autowired
     private PhysiotherapistService physiotherapistDTOService;
@@ -45,6 +49,7 @@ public class PhysiotherapistRegistrationController {
     ResponseEntity<Physiotherapist> createRegister(@RequestBody @Valid Physiotherapist registerEntity){
         if(!physioterapistRegistrationRepository.existsByEmail(registerEntity.getEmail())){
             Physiotherapist result = physioterapistRegistrationRepository.save(registerEntity);
+            //logger.warning("Physiotherapist is added");
 
            /* try {
                 verifyEmailSender.sendMailNotification(registerEntity);
