@@ -3,7 +3,7 @@ package com.example.HANDIPRO.controller;
 import com.example.HANDIPRO.models.DTO.PhysiotherapistReadDTO;
 import com.example.HANDIPRO.models.Physiotherapist;
 import com.example.HANDIPRO.Repositories.PhysiotherapistRegistrationRepository;
-import com.example.HANDIPRO.services.PhysiotherapistDTOService;
+import com.example.HANDIPRO.services.PhysiotherapistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class PhysiotherapistRegistrationController {
     private final PhysiotherapistRegistrationRepository physioterapistRegistrationRepository;
 
     @Autowired
-    private PhysiotherapistDTOService physiotherapistDTOService;
+    private PhysiotherapistService physiotherapistDTOService;
 
    /* @Autowired
     private VerifyEmailSender verifyEmailSender;*/

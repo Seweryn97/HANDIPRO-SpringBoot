@@ -4,7 +4,7 @@ import com.example.HANDIPRO.Repositories.PatientRegistrationRepository;
 import com.example.HANDIPRO.models.DTO.PatientReadDTO;
 import com.example.HANDIPRO.models.DTO.PatientUpdateDTO;
 import com.example.HANDIPRO.models.Patient;
-import com.example.HANDIPRO.services.PatientDTOService;
+import com.example.HANDIPRO.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class PatientRegistartionController {
     private final PatientRegistrationRepository patientRegistrationRepository;
 
     @Autowired
-    PatientDTOService patientDTOService;
+    PatientService patientService;
 
     public PatientRegistartionController(PatientRegistrationRepository patientRegistrationRepository) {
         this.patientRegistrationRepository = patientRegistrationRepository;
@@ -36,7 +36,7 @@ public class PatientRegistartionController {
 
         Iterator<Patient> iterator = patients.iterator();
         iterator.forEachRemaining(patient -> {
-            patientsDTO.add(patientDTOService.readPatient(patient));
+            patientsDTO.add(patientService.readPatient(patient));
         });
 
         return ResponseEntity.ok(patientsDTO);
@@ -45,9 +45,7 @@ public class PatientRegistartionController {
     @PostMapping(path = "/register/patient")
     ResponseEntity<Patient> createRegister(@RequestBody @Valid  Patient patient ){
         if(!patientRegistrationRepository.existsByEmail(patient.getEmail())){
-
             Patient result = patientRegistrationRepository.save(patient);
-
             /*try {
                 patientRegistrationRepository.sendMailNotification(registerEntity);
             }catch (MessagingException ex){
@@ -60,16 +58,16 @@ public class PatientRegistartionController {
 
     @Transactional
     @PatchMapping(path = "/updatepatient")
-    ResponseEntity<?>togglePatientWithPhysiotherapist(@RequestBody @Valid PatientUpdateDTO patientDTO){
+    ResponseEntity<?>updatePatientWithPhysiotherapist(@RequestBody @Valid PatientUpdateDTO patientDTO){
         Optional<Patient> optionalPatient = patientRegistrationRepository.findById(patientDTO.getId());
 
         if(!optionalPatient.isPresent()){
             return ResponseEntity.notFound().build();
         }
-
         Patient patient = optionalPatient.get();
-        patientDTOService.updatePatientWithPhysiotherapist(patient,patientDTO);
-        PatientReadDTO result = patientDTOService.readPatient(patient);
+        patientService.updatePatientWithPhysiotherapist(patient,patientDTO);
+        PatientReadDTO result = patientService.readPatient(patient);
+
         return ResponseEntity.ok(result);
     }
 }
