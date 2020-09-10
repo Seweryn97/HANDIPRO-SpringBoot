@@ -1,5 +1,7 @@
 package com.example.HANDIPRO.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,8 +11,8 @@ public class Task {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
-    private String videoName;
-    private String csvName;
+    private String videoname;
+    private String csvname;
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
@@ -28,18 +30,27 @@ public class Task {
     }
 
     public String getVideoName() {
-        return videoName;
+        return videoname;
     }
 
     public void setVideoName(String videoName) {
-        this.videoName = videoName;
+        this.videoname = videoName;
     }
 
     public String getCsvName() {
-        return csvName;
+        return csvname;
     }
 
     public void setCsvName(String csvName) {
-        this.csvName = csvName;
+        this.csvname = csvName;
+    }
+
+    @JsonBackReference
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

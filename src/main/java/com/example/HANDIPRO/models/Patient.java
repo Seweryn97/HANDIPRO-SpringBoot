@@ -88,7 +88,6 @@ public class Patient {
         this.physiotherapist = physiotherapist;
     }
 
-    @JsonManagedReference
     public Set<Task> getTasks() {
         return tasks;
     }
