@@ -1,8 +1,10 @@
 drop table if exists tasks;
 create table tasks(
     id int primary key auto_increment,
-    videoname varchar (50) not null,
-    csvname varchar (50) not null
+    videofilename varchar (50) not null,
+    csvfilename varchar (50) not null,
+    videodata BLOB (MAX) not null,
+    csvdata BLOB (MAX) not null
 );
 
 alter table tasks add column patient_id int null;

@@ -27,7 +27,7 @@ public class PhysiotherapistServiceTest {
             toTest.readPhysiotherapist(physiotherapist);
         });
 
-        assertThat(exception).isInstanceOf(IllegalArgumentException.class)
+        assertThat(exception).isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Repository is empty");
     }
 

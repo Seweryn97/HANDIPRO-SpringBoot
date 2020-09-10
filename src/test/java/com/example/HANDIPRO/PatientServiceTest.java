@@ -27,10 +27,10 @@ public class PatientServiceTest {
         var toTest = new PatientService(mockPatientRepository);
 
         var exception = catchThrowable(() -> {
-            toTest.readPatient(patient);
+            toTest.readPatient();
         });
 
-        assertThat(exception).isInstanceOf(IllegalArgumentException.class)
+        assertThat(exception).isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Repository is empty");
     }
 
