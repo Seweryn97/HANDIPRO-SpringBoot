@@ -1,9 +1,11 @@
 package com.example.HANDIPRO.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Set;
 
 @Entity
 @Table (name = "patient")
@@ -18,9 +20,12 @@ public class Patient {
     private String email;
     private String password;
     private String repeatedpassword;
-    @ManyToOne //(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne
     @JoinColumn(name = "physiotherapist_id")
     private Physiotherapist physiotherapist;
+    @OneToMany (cascade = CascadeType.ALL,  mappedBy = "patient", fetch = FetchType.EAGER)
+    Set<Task> tasks;
+
 
     public Patient(){
 
@@ -81,5 +86,13 @@ public class Patient {
 
     public void setPhysiotherapist(Physiotherapist physiotherapist) {
         this.physiotherapist = physiotherapist;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
     }
 }
