@@ -11,14 +11,26 @@ public class Task {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
-    private String videoname;
-    private String csvname;
+    private String videofilename;
+    private String csvfilename;
+    @Lob
+    private byte [] videodata;
+    @Lob
+    private byte [] csvdata;
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    Task(){
+    public Task(){
 
+    }
+
+    public Task(String videoFileName, String csvFileName ,
+                byte [] videoData, byte [] csvData){
+        this.videofilename = videoFileName;
+        this.csvfilename = csvFileName;
+        this.videodata = videoData;
+        this.csvdata = csvData;
     }
 
     public int getId() {
@@ -29,20 +41,12 @@ public class Task {
         this.id = id;
     }
 
-    public String getVideoName() {
-        return videoname;
+    public String getVideoFileName() {
+        return videofilename;
     }
 
-    public void setVideoName(String videoName) {
-        this.videoname = videoName;
-    }
-
-    public String getCsvName() {
-        return csvname;
-    }
-
-    public void setCsvName(String csvName) {
-        this.csvname = csvName;
+    public String getCsvFileName() {
+        return csvfilename;
     }
 
     @JsonBackReference

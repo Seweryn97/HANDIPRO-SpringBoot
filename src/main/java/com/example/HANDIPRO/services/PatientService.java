@@ -7,35 +7,50 @@ import com.example.HANDIPRO.models.Patient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PatientService {
+
     private PatientRegistrationRepository repository;
 
     public PatientService(final PatientRegistrationRepository repository){
         this.repository = repository;
     }
 
-    public PatientUpdateDTO updatePatientWithPhysiotherapist (Patient patient,PatientUpdateDTO patientUpdateDTO){
+    public boolean updatePatientWithPhysiotherapist (PatientUpdateDTO patientUpdateDTO){
         if(repository.findById(patientUpdateDTO.getId()).isEmpty()){
-            throw new IllegalArgumentException("Patient is not found");
+            throw new IllegalStateException("Patient is not found");
         }
+        Optional<Patient> optionalPatient = repository.findById(patientUpdateDTO.getId());
+        if(optionalPatient.isEmpty()){
+            return false;
+        }
+        Patient patient = optionalPatient.get();
 
         patient.setPhysiotherapist(patientUpdateDTO.getPhysiotherapist());
         repository.save(patient);
 
-        return new PatientUpdateDTO();
+        return true;
     }
 
-    public PatientReadDTO readPatient(Patient patient){
+    public List<PatientReadDTO> readPatient(){
         if(repository.findAll().isEmpty()){
-            throw new IllegalArgumentException("Repository is empty");
+            throw new IllegalStateException("Repository is empty");
         }
 
-        Patient result = repository.save(patient);
+        List<Patient> patients = repository.findAll();
+        List<PatientReadDTO> patientsDTO = new ArrayList<>();
 
-        return  new PatientReadDTO(result);
+        Iterator<Patient> iterator = patients.iterator();
+        iterator.forEachRemaining(patient -> {
+            patientsDTO.add(new PatientReadDTO(repository.save(patient)));
+        });
+
+        return  patientsDTO;
     }
 
     public boolean isPasswordFormatOk(Patient patient){

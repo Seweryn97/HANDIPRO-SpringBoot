@@ -6,4 +6,5 @@ spring:
     url: jdbc:h2:file:C:/Users/Seweryn/Projekty/HANDIPRO/dbHANDI
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+
