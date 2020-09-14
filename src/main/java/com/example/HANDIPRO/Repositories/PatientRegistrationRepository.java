@@ -19,5 +19,7 @@ public interface PatientRegistrationRepository {
 
     boolean existsByEmail (String email);
 
+    void deleteById(Integer id);
+
 
 }

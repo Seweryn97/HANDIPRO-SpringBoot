@@ -19,7 +19,7 @@ public class Physiotherapist {
     private String email;
     private String password;
     private String repeatedpassword;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "physiotherapist", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "physiotherapist", fetch = FetchType.LAZY)
     private Set<Patient> patients;
 
     public Physiotherapist(){

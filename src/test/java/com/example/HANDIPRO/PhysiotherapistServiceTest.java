@@ -24,7 +24,7 @@ public class PhysiotherapistServiceTest {
         var toTest = new PhysiotherapistService(mockPhysiotherapistRepository);
 
         var exception = catchThrowable(() -> {
-            toTest.readPhysiotherapist(physiotherapist);
+            toTest.readPhysiotherapist();
         });
 
         assertThat(exception).isInstanceOf(IllegalStateException.class)
@@ -38,7 +38,7 @@ public class PhysiotherapistServiceTest {
 
         physiotherapist.setPassword("Haselwdf1");
 
-        Assertions.assertTrue(toTest.isPasswordFormatOk(physiotherapist));
+        Assertions.assertTrue(toTest.isPasswordFormatOk(physiotherapist.getPassword()));
     }
 }
 
