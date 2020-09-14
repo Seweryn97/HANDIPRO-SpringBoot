@@ -4,19 +4,22 @@ import com.example.HANDIPRO.models.Patient;
 import com.example.HANDIPRO.models.Task;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PatientReadDTO {
 
     private int id;
     private String name;
     private String surname;
-    private Set<Task> taskList;
+    private String email;
+    private Set<TaskReadDTO> taskList;
 
     public PatientReadDTO(Patient patient){
-        id = patient.getId();
-        name = patient.getName();
-        surname = patient.getSurname();
-        taskList = patient.getTasks();
+        this.id = patient.getId();
+        this.name = patient.getName();
+        this.surname = patient.getSurname();
+        this.email = patient.getEmail();
+        this.taskList = patient.getTasks().stream().map(TaskReadDTO::new).collect(Collectors.toSet());
     }
 
     public int getId() {
@@ -43,11 +46,19 @@ public class PatientReadDTO {
         this.surname = surname;
     }
 
-    public Set<Task> getTaskList() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<TaskReadDTO> getTaskList() {
         return taskList;
     }
 
-    public void setTaskList(Set<Task> taskList) {
+    public void setTaskList(Set<TaskReadDTO> taskList) {
         this.taskList = taskList;
     }
 }

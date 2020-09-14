@@ -20,12 +20,11 @@ public class Patient {
     private String email;
     private String password;
     private String repeatedpassword;
-    @ManyToOne
-    @JoinColumn(name = "physiotherapist_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "physiotherapist_id", nullable = true)
     private Physiotherapist physiotherapist;
-    @OneToMany (cascade = CascadeType.ALL,  mappedBy = "patient", fetch = FetchType.EAGER)
+    @OneToMany (cascade = CascadeType.REMOVE,  mappedBy = "patient",fetch = FetchType.LAZY)
     Set<Task> tasks;
-
 
     public Patient(){
 

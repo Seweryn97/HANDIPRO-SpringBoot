@@ -11,11 +11,9 @@ public interface PhysiotherapistRegistrationRepository {
 
     Physiotherapist save(Physiotherapist Entity);
 
-    //Optional <Physiotherapist> findById (Integer id);
+    Optional<Physiotherapist> findById(int id);
 
-    Physiotherapist findById(int id);
-
-    Optional<Physiotherapist> findByEmail(String email);
+    void deleteById(Integer id);
 
     boolean existsByEmail (String email);
 

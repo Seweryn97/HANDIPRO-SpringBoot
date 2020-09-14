@@ -41,12 +41,36 @@ public class Task {
         this.id = id;
     }
 
-    public String getVideoFileName() {
+    public String getVideofilename() {
         return videofilename;
     }
 
-    public String getCsvFileName() {
+    public void setVideofilename(String videofilename) {
+        this.videofilename = videofilename;
+    }
+
+    public String getCsvfilename() {
         return csvfilename;
+    }
+
+    public void setCsvfilename(String csvfilename) {
+        this.csvfilename = csvfilename;
+    }
+
+    public byte[] getVideodata() {
+        return videodata;
+    }
+
+    public void setVideodata(byte[] videodata) {
+        this.videodata = videodata;
+    }
+
+    public byte[] getCsvdata() {
+        return csvdata;
+    }
+
+    public void setCsvdata(byte[] csvdata) {
+        this.csvdata = csvdata;
     }
 
     @JsonBackReference
