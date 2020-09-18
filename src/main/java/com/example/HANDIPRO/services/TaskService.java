@@ -2,23 +2,20 @@ package com.example.HANDIPRO.services;
 
 import com.example.HANDIPRO.Repositories.PatientRegistrationRepository;
 import com.example.HANDIPRO.Repositories.TaskRepository;
+import com.example.HANDIPRO.exceptions.FileStorageException;
+import com.example.HANDIPRO.exceptions.IllegalFilePathException;
+import com.example.HANDIPRO.exceptions.RecordNotFoundException;
 import com.example.HANDIPRO.models.DTO.TaskReadDTO;
 import com.example.HANDIPRO.models.Task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Quota;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +33,7 @@ public class TaskService {
     PatientRegistrationRepository patientRegistrationRepository;
 
     public List<TaskReadDTO> readAllTasks(List<Task> tasks){
+
         List<TaskReadDTO> tasksList = new ArrayList<>();
 
         Iterator<Task> iterator = tasks.iterator();
@@ -46,39 +44,47 @@ public class TaskService {
         return tasksList;
     }
 
-    public Task storeFiles(int id, MultipartFile video, MultipartFile csv) throws FileSystemException {
+    public Task storeFiles(int id, MultipartFile video, MultipartFile csv) throws FileStorageException {
 
         String videoFileName = StringUtils.cleanPath(video.getOriginalFilename());
         String csvFileName = StringUtils.cleanPath(csv.getOriginalFilename());
 
-        try {
+        try{
+
             if (/*videoFileName.contains("..") ||*/ !Objects.equals(video.getContentType(), "video/mp4")) {
-                throw new IllegalArgumentException("Inapproprite file path" + videoFileName);
+                throw new IllegalFilePathException(videoFileName);
             }
             if (/*csvFileName.contains("..") ||*/ !Objects.equals(csv.getContentType(), "text/csv")) {
-                throw new IllegalArgumentException("Inapproprite file path" + csvFileName);
+                throw new IllegalFilePathException(csvFileName);
             }
+
+        } catch (IllegalFilePathException ex){
+            ex.getMessage();
+        }
+
+        try {
 
             logger.warn(video.getContentType());
             logger.warn(csv.getContentType());
             Task task = new Task(videoFileName,csvFileName, video.getBytes(),csv.getBytes());
             task.setPatient(patientRegistrationRepository.findById(id).orElseThrow(() ->
-                    new NullPointerException("Patient not exists")));
+                    new RecordNotFoundException("Patient")));
 
             return taskRepository.save(task);
-
-        } catch (Exception ex) {
-            throw  new FileSystemException("Cannot store the file"+ ex);
         }
+        catch (Exception ex){
+            throw new FileStorageException();
+        }
+
     }
 
-    public Task getTask(int id){
+    public Task getTask(int id) throws RecordNotFoundException{
         return taskRepository.findById(id).orElseThrow(() ->
-                new FileSystemNotFoundException("File with id : "+id+" not exists "));
+                new RecordNotFoundException("Task with id "+id));
     }
 
 
-    public Task updateTask(MultipartFile video, MultipartFile csv, int id) throws IOException {
+    public Task updateTask(MultipartFile video, MultipartFile csv, int id) throws IOException, RecordNotFoundException {
         Task toUpdate = getTask(id);
 
         toUpdate.setVideofilename(video.getOriginalFilename());
@@ -91,7 +97,10 @@ public class TaskService {
         return toUpdate;
     }
 
-    public String deleteTask(int id){
+    public String deleteTask(int id) throws RecordNotFoundException {
+
+        taskRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Task"));
+
         taskRepository.deleteById(id);
 
         if(taskRepository.findById(id).isPresent()){

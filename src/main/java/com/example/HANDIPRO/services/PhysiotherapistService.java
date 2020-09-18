@@ -1,6 +1,7 @@
 package com.example.HANDIPRO.services;
 
 import com.example.HANDIPRO.Repositories.PhysiotherapistRegistrationRepository;
+import com.example.HANDIPRO.exceptions.RecordNotFoundException;
 import com.example.HANDIPRO.models.DTO.PhysiotherapistReadDTO;
 import com.example.HANDIPRO.models.DTO.PhysiotherapistUpdateDTO;
 import com.example.HANDIPRO.models.Physiotherapist;
@@ -23,13 +24,14 @@ public class PhysiotherapistService {
         return new PhysiotherapistDTO(result);
     }*/
 
-    public Physiotherapist getPatientById(int id){
+    public Physiotherapist getPhysiotherapistById(int id) throws RecordNotFoundException {
+
         if(repository.findById(id).isEmpty()){
-            throw new IllegalStateException("Patient is not found");
+            throw new RecordNotFoundException("Physiotherapist");
         }
         Optional<Physiotherapist> optionalPhysiotherapist = repository.findById(id);
 
-        return optionalPhysiotherapist.orElseThrow(() -> new NullPointerException("Physiotherapist does not exist"));
+        return optionalPhysiotherapist.orElseThrow(() -> new RecordNotFoundException("Physiotherapist"));
     }
 
     public boolean emailUpdate (PhysiotherapistUpdateDTO physiotherapistDTO, Physiotherapist physiotherapist){
@@ -51,11 +53,10 @@ public class PhysiotherapistService {
         if(physiotherapistDTO.getPassword().equals(physiotherapist.getPassword()) ||
                 !isPasswordFormatOk(physiotherapistDTO.getPassword()) ||
                 !physiotherapistDTO.getRepeatedpassword().equals(physiotherapistDTO.getPassword())){
-            message = "Password should has one big letter, should longer or equal than 8 and should has numbers. " +
-                    "Password an repeatedpassword has to be the same. New password cannot be the same as old";
+            message = "Password should has one big letter, should be longer or equal than 8 and should has numbers. " +
+                    "Password and repeatedpassword has to be the same. New password cannot be the same as old";
             return false;
         }
-
         physiotherapist.setPassword(physiotherapistDTO.getPassword());
         physiotherapist.setRepeatedpassword(physiotherapistDTO.getRepeatedpassword());
 
@@ -77,7 +78,9 @@ public class PhysiotherapistService {
         return physiotherapistReadDTO;
     }
 
-    public String deletePhysiotherapist(int id){
+    public String deletePhysiotherapist(int id) throws RecordNotFoundException {
+
+        repository.findById(id).orElseThrow(() -> new RecordNotFoundException("Physiotherapist"));
 
         repository.deleteById(id);
 
@@ -88,6 +91,7 @@ public class PhysiotherapistService {
     }
 
     public boolean isPasswordFormatOk(String password){
+
         boolean hasAtLeastOneBigLetter = !password.equals(password.toLowerCase());
         boolean hasAtLeastOneInt = password.matches(".*\\d.*");
         boolean isLongerOrEqualThanEight = password.length() >= 8;

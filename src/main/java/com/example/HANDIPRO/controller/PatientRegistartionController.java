@@ -1,6 +1,7 @@
 package com.example.HANDIPRO.controller;
 
 import com.example.HANDIPRO.Repositories.PatientRegistrationRepository;
+import com.example.HANDIPRO.exceptions.RecordNotFoundException;
 import com.example.HANDIPRO.models.DTO.*;
 import com.example.HANDIPRO.models.Patient;
 import com.example.HANDIPRO.services.PatientService;
@@ -47,7 +48,7 @@ public class PatientRegistartionController {
 
     @PatchMapping("/update/patient/{data}/{id}")
     ResponseEntity<?>updatePatient(@RequestBody @Valid PatientUpdateDTO patient
-            , @PathVariable int id, @PathVariable String data){
+            , @PathVariable int id, @PathVariable String data) throws RecordNotFoundException {
         boolean isPresent = false;
         if(data.equals("email")){
             isPresent = patientService.emailUpdate(patient,patientService.getPatientById(id));
@@ -67,7 +68,7 @@ public class PatientRegistartionController {
     }
 
     @DeleteMapping("/delete/patient/{id}")
-    ResponseEntity<String> removePatient(@PathVariable int id){
+    ResponseEntity<String> removePatient(@PathVariable int id) throws RecordNotFoundException {
         return ResponseEntity.ok(patientService.deletePatient(id));
     }
 }

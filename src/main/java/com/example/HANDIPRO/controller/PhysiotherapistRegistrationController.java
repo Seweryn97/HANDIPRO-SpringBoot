@@ -1,5 +1,6 @@
 package com.example.HANDIPRO.controller;
 
+import com.example.HANDIPRO.exceptions.RecordNotFoundException;
 import com.example.HANDIPRO.models.DTO.PhysiotherapistReadDTO;
 import com.example.HANDIPRO.models.DTO.PhysiotherapistUpdateDTO;
 import com.example.HANDIPRO.models.Physiotherapist;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -64,13 +64,15 @@ public class PhysiotherapistRegistrationController {
 
     @PatchMapping("/update/physiotherapist/{data}/{id}")
     ResponseEntity<?> updatePhysiotherpaist(@RequestBody @Valid PhysiotherapistUpdateDTO physiotherapist,
-                                            @PathVariable int id, @PathVariable String data){
+                                            @PathVariable int id, @PathVariable String data) throws RecordNotFoundException {
         boolean isPresent = false;
         if(data.equals("email")){
-            isPresent = physiotherapistService.emailUpdate(physiotherapist,physiotherapistService.getPatientById(id));
+            isPresent = physiotherapistService.emailUpdate(physiotherapist,
+                    physiotherapistService.getPhysiotherapistById(id));
         }
         if(data.equals("password")){
-            isPresent = physiotherapistService.passwordUpdate(physiotherapist,physiotherapistService.getPatientById(id));
+            isPresent = physiotherapistService.passwordUpdate(physiotherapist,
+                    physiotherapistService.getPhysiotherapistById(id));
         }
         if(isPresent){
             PhysiotherapistReadDTO result = physiotherapistService.readPhysiotherapist().get(id-1);
@@ -81,7 +83,7 @@ public class PhysiotherapistRegistrationController {
     }
 
     @DeleteMapping("/delete/physiotherapist/{id}")
-    ResponseEntity<String> deletePhysiotherapist(@PathVariable int id){
+    ResponseEntity<String> deletePhysiotherapist(@PathVariable int id) throws RecordNotFoundException {
        return ResponseEntity.ok(physiotherapistService.deletePhysiotherapist(id));
     }
 

@@ -17,7 +17,7 @@ public class PhysiotherapistServiceTest {
     Physiotherapist physiotherapist = new Physiotherapist();
 
     @Test
-    public void isPhysiotherapistEmpty(){
+    public void isPhysiotherapistEmptyTest(){
         var mockPhysiotherapistRepository = mock(PhysiotherapistRegistrationRepository.class);
         when(mockPhysiotherapistRepository.findAll()).thenReturn(new ArrayList<>());
 

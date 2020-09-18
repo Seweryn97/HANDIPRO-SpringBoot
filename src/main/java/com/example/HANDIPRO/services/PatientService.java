@@ -1,6 +1,7 @@
 package com.example.HANDIPRO.services;
 
 import com.example.HANDIPRO.Repositories.PatientRegistrationRepository;
+import com.example.HANDIPRO.exceptions.RecordNotFoundException;
 import com.example.HANDIPRO.models.DTO.*;
 import com.example.HANDIPRO.models.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,11 @@ public class PatientService {
         this.repository = repository;
     }
 
-    public Patient getPatientById(int id){
-        /*if(repository.findById(id).isEmpty()){
-            throw new IllegalStateException("Patient is not found");
-        }*/
+    public Patient getPatientById(int id) throws RecordNotFoundException {
+
         Optional<Patient> optionalPatient = repository.findById(id);
 
-        return optionalPatient.orElseThrow(() -> new NullPointerException("Patient does not exist"));
+        return optionalPatient.orElseThrow(() -> new RecordNotFoundException("Patient"));
     }
 
     public boolean emailUpdate (PatientUpdateDTO patientDTO, Patient patient){
@@ -40,7 +39,6 @@ public class PatientService {
             return false;
         }
         patient.setEmail(patientDTO.getEmail());
-
         repository.save(patient);
 
         return true;
@@ -64,12 +62,13 @@ public class PatientService {
     }
 
     public boolean physiotherapistUpdate(PatientUpdateDTO patientDTO, Patient patient){
+
         if(patientDTO.getPhysiotherapist().equals(patient.getPhysiotherapist())){
             message = "Physiotherapist are the same";
             return false;
         }
-
         patient.setPhysiotherapist(patientDTO.getPhysiotherapist());
+
         return true;
     }
 
@@ -86,13 +85,16 @@ public class PatientService {
         return  patientsDTO;
     }
 
-    public String deletePatient(int id){
+    public String deletePatient(int id) throws RecordNotFoundException {
+
+        repository.findById(id).orElseThrow(()-> new RecordNotFoundException("Patient"));
 
         repository.deleteById(id);
 
         if(repository.findById(id).isPresent()){
             return "Patient has not been deleted";
         }
+
         else return "Patient has been deleted ";
     }
 
