@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table (name = "patient")
-public class Patient {
+public class Patient{
 
     @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
@@ -19,11 +19,15 @@ public class Patient {
     private String email;
     private String password;
     private String repeatedpassword;
+    private boolean confirmedemail;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "physiotherapist_id", nullable = true)
+    //@JoinColumn(name = "physiotherapist_id", nullable = true)
     private Physiotherapist physiotherapist;
-    @OneToMany (cascade = CascadeType.REMOVE,  mappedBy = "patient",fetch = FetchType.LAZY)
+    @OneToMany (cascade = CascadeType.ALL,  mappedBy = "patient",fetch = FetchType.LAZY)
     Set<Task> tasks;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "patient",fetch = FetchType.LAZY)
+    //@JoinColumn(nullable = false, name = "token")
+    private PatientToken patientToken;
 
     public Patient(){
 
@@ -92,5 +96,21 @@ public class Patient {
 
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public boolean isConfirmedemail() {
+        return confirmedemail;
+    }
+
+    public void setConfirmedemail(boolean confirmedemail) {
+        this.confirmedemail = confirmedemail;
+    }
+
+    public PatientToken getPatientToken() {
+        return patientToken;
+    }
+
+    public void setPatientToken(PatientToken patientToken) {
+        this.patientToken = patientToken;
     }
 }

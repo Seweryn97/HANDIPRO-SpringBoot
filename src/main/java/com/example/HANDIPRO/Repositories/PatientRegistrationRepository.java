@@ -10,6 +10,8 @@ public interface PatientRegistrationRepository {
 
     Patient save(Patient Entity);
 
+    Patient findByEmail(String email);
+
     Optional<Patient> findById(int id);
 
     boolean existsByEmail (String email);

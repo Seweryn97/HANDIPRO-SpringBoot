@@ -19,8 +19,11 @@ public class Physiotherapist {
     private String email;
     private String password;
     private String repeatedpassword;
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "physiotherapist", fetch = FetchType.LAZY)
+    private boolean confirmedemail;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "physiotherapist", fetch = FetchType.LAZY)
     private Set<Patient> patients;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "physiotherapist",fetch = FetchType.LAZY, orphanRemoval = true)
+    PhysiotherapistToken physiotherapisttoken;
 
     public Physiotherapist(){
 
@@ -80,5 +83,21 @@ public class Physiotherapist {
 
     public void setPatients(Set<Patient> patients) {
         this.patients = patients;
+    }
+
+    public boolean isConfirmedemail() {
+        return confirmedemail;
+    }
+
+    public void setConfirmedemail(boolean confirmedemail) {
+        this.confirmedemail = confirmedemail;
+    }
+
+    public PhysiotherapistToken getPhysiotherapisttoken() {
+        return physiotherapisttoken;
+    }
+
+    public void setPhysiotherapisttoken(PhysiotherapistToken physiotherapisttoken) {
+        this.physiotherapisttoken = physiotherapisttoken;
     }
 }

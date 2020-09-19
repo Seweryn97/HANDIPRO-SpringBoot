@@ -1,9 +1,12 @@
 package com.example.HANDIPRO.services;
 
 import com.example.HANDIPRO.Repositories.PatientRegistrationRepository;
+import com.example.HANDIPRO.Repositories.PatientTokenRepository;
+import com.example.HANDIPRO.exceptions.RecordAlreadyExistsException;
 import com.example.HANDIPRO.exceptions.RecordNotFoundException;
 import com.example.HANDIPRO.models.DTO.*;
 import com.example.HANDIPRO.models.Patient;
+import com.example.HANDIPRO.models.Physiotherapist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +18,22 @@ import java.util.Optional;
 @Service
 public class PatientService {
 
-    @Autowired
     private final PatientRegistrationRepository repository;
+
+    private final PatientTokenRepository patientTokenRepository;
 
     public static String message;
 
-    public PatientService(final PatientRegistrationRepository repository){
+    public PatientService(final PatientRegistrationRepository repository, PatientTokenRepository patientTokenRepository){
         this.repository = repository;
+        this.patientTokenRepository = patientTokenRepository;
+    }
+
+    public Patient registerPatient(Patient patient) throws RecordAlreadyExistsException {
+        if(repository.existsByEmail(patient.getEmail())){
+            throw new RecordAlreadyExistsException("Patient");
+        }
+        return repository.save(patient);
     }
 
     public Patient getPatientById(int id) throws RecordNotFoundException {

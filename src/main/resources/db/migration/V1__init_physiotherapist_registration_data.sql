@@ -5,6 +5,8 @@ create table physiotherapist (
     surname varchar (30) not null ,
     email varchar (30) not null ,
     password varchar (30) not null ,
-    repeatedpassword varchar (30) not null
-)
+    repeatedpassword varchar (30) not null,
+    confirmedemail bit not null
+);
+
 

@@ -1,28 +1,44 @@
 package com.example.HANDIPRO.services;
 
 import com.example.HANDIPRO.Repositories.PhysiotherapistRegistrationRepository;
+import com.example.HANDIPRO.Repositories.PhysiotherapistTokenRepository;
+import com.example.HANDIPRO.exceptions.RecordAlreadyExistsException;
 import com.example.HANDIPRO.exceptions.RecordNotFoundException;
 import com.example.HANDIPRO.models.DTO.PhysiotherapistReadDTO;
 import com.example.HANDIPRO.models.DTO.PhysiotherapistUpdateDTO;
+import com.example.HANDIPRO.models.Patient;
 import com.example.HANDIPRO.models.Physiotherapist;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.mapping.MetadataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
 public class PhysiotherapistService {
 
-    private PhysiotherapistRegistrationRepository repository;
+    private final PhysiotherapistRegistrationRepository repository;
+
+    private final PhysiotherapistTokenRepository physiotherapistTokenRepository;
 
     public static String message;
 
-    public PhysiotherapistService(PhysiotherapistRegistrationRepository repository){
+    public PhysiotherapistService(PhysiotherapistRegistrationRepository repository,
+                                  PhysiotherapistTokenRepository physiotherapistTokenRepository){
         this.repository = repository;
+        this.physiotherapistTokenRepository = physiotherapistTokenRepository;
     }
 
-    /*public PhysiotherapistDTO createPhysiotherapist(Physiotherapist physiotherapist){
-        Physiotherapist result = repository.save(physiotherapist);
-        return new PhysiotherapistDTO(result);
-    }*/
+    public Physiotherapist registerPhysiotherapist(Physiotherapist physiotherapist) throws RecordAlreadyExistsException{
+        if(repository.existsByEmail(physiotherapist.getEmail())){
+            throw new RecordAlreadyExistsException("Physiotherapist");
+        }
+        return repository.save(physiotherapist);
+    }
 
     public Physiotherapist getPhysiotherapistById(int id) throws RecordNotFoundException {
 
@@ -80,7 +96,14 @@ public class PhysiotherapistService {
 
     public String deletePhysiotherapist(int id) throws RecordNotFoundException {
 
-        repository.findById(id).orElseThrow(() -> new RecordNotFoundException("Physiotherapist"));
+        Physiotherapist result = repository.findById(id).orElseThrow(() ->
+                new RecordNotFoundException("Physiotherapist"));
+
+        for (Patient patient: result.getPatients()) {
+            patient.setPhysiotherapist(null);
+        }
+
+        result.setPatients(null);
 
         repository.deleteById(id);
 

@@ -18,7 +18,7 @@ public class Task {
     @Lob
     private byte [] csvdata;
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    //@JoinColumn(name = "patient_id")
     private Patient patient;
 
     public Task(){
