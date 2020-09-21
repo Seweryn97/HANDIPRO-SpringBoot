@@ -20,13 +20,10 @@ public class PatientService {
 
     private final PatientRegistrationRepository repository;
 
-    private final PatientTokenRepository patientTokenRepository;
-
     public static String message;
 
-    public PatientService(final PatientRegistrationRepository repository, PatientTokenRepository patientTokenRepository){
+    public PatientService(final PatientRegistrationRepository repository){
         this.repository = repository;
-        this.patientTokenRepository = patientTokenRepository;
     }
 
     public Patient registerPatient(Patient patient) throws RecordAlreadyExistsException {
@@ -47,7 +44,7 @@ public class PatientService {
 
         if(patientDTO.getEmail().equals(patient.getEmail()) ||
                 !patientDTO.getPassword().equals(patient.getPassword())){
-            message = "New email cannot be the same as old and passwords has to be the same";
+            message = "New email cannot be the same as the old email and passwords must be the same";
             return false;
         }
         patient.setEmail(patientDTO.getEmail());
@@ -60,8 +57,8 @@ public class PatientService {
 
         if(patientDTO.getPassword().equals(patient.getPassword()) || !isPasswordFormatOk(patientDTO.getPassword()) ||
         !patientDTO.getRepeatedpassword().equals(patientDTO.getPassword())){
-            message = "Password should has one big letter, should longer or equal than 8 and should has numbers. " +
-                    "Password an repeatedpassword has to be the same. New password cannot be the same as old";
+            message = "Password should have one big letter, should be greater than or equal to 8 and should have numbers. " +
+                    "Password an repeatedpassword must be the same. New password cannot be the same as the old password";
             return false;
         }
 
@@ -76,7 +73,7 @@ public class PatientService {
     public boolean physiotherapistUpdate(PatientUpdateDTO patientDTO, Patient patient){
 
         if(patientDTO.getPhysiotherapist().equals(patient.getPhysiotherapist())){
-            message = "Physiotherapist are the same";
+            message = "Physiotherapists are the same";
             return false;
         }
         patient.setPhysiotherapist(patientDTO.getPhysiotherapist());
@@ -104,10 +101,10 @@ public class PatientService {
         repository.deleteById(id);
 
         if(repository.findById(id).isPresent()){
-            return "Patient has not been deleted";
+            return "Patient was not removed";
         }
 
-        else return "Patient has been deleted ";
+        else return "Patient was not removed";
     }
 
     public boolean isPasswordFormatOk(String password){

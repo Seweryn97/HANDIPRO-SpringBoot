@@ -23,17 +23,14 @@ public class PhysiotherapistService {
 
     private final PhysiotherapistRegistrationRepository repository;
 
-    private final PhysiotherapistTokenRepository physiotherapistTokenRepository;
-
     public static String message;
 
-    public PhysiotherapistService(PhysiotherapistRegistrationRepository repository,
-                                  PhysiotherapistTokenRepository physiotherapistTokenRepository){
+    public PhysiotherapistService(PhysiotherapistRegistrationRepository repository){
         this.repository = repository;
-        this.physiotherapistTokenRepository = physiotherapistTokenRepository;
     }
 
     public Physiotherapist registerPhysiotherapist(Physiotherapist physiotherapist) throws RecordAlreadyExistsException{
+
         if(repository.existsByEmail(physiotherapist.getEmail())){
             throw new RecordAlreadyExistsException("Physiotherapist");
         }
@@ -54,7 +51,7 @@ public class PhysiotherapistService {
 
         if(physiotherapistDTO.getEmail().equals(physiotherapist.getEmail()) ||
                 !physiotherapistDTO.getPassword().equals(physiotherapist.getPassword())){
-            message = "New email cannot be the same as old and passwords has to be the same";
+            message = "New email cannot be the same as the old email and passwords have to be the same";
             return false;
         }
         physiotherapist.setEmail(physiotherapistDTO.getEmail());
@@ -69,8 +66,8 @@ public class PhysiotherapistService {
         if(physiotherapistDTO.getPassword().equals(physiotherapist.getPassword()) ||
                 !isPasswordFormatOk(physiotherapistDTO.getPassword()) ||
                 !physiotherapistDTO.getRepeatedpassword().equals(physiotherapistDTO.getPassword())){
-            message = "Password should has one big letter, should be longer or equal than 8 and should has numbers. " +
-                    "Password and repeatedpassword has to be the same. New password cannot be the same as old";
+            message = "Password should have one big letter, should be greater than or equal to 8 and should have numbers. " +
+                    "Password and repeatedpassword have to be the same. New password cannot be the same as the old password";
             return false;
         }
         physiotherapist.setPassword(physiotherapistDTO.getPassword());
@@ -104,13 +101,12 @@ public class PhysiotherapistService {
         }
 
         result.setPatients(null);
-
         repository.deleteById(id);
 
         if(repository.findById(id).isPresent()){
-            return "Physiotherapist has not been deleted";
+            return "Physiotherapist was not removed";
         }
-        else return "Physiotherapist has been deleted ";
+        else return "Physiotherapist was not removed ";
     }
 
     public boolean isPasswordFormatOk(String password){

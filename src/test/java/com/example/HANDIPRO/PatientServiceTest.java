@@ -6,6 +6,7 @@ import com.example.HANDIPRO.models.Patient;
 import com.example.HANDIPRO.services.PatientService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -90,13 +91,16 @@ public class PatientServiceTest {
     }
 
     @Test
-    public void isPatientPasswordFormatOkTest(){
-        /*var mockPatientRepository = mock(PatientRegistrationRepository.class);
-        var toTest = new PatientService(mockPatientRepository);
+    public void is_patient_password_format_ok_test(){
 
-        String password = "Haselko123";
+        //given
+        var repository = mock(PatientRegistrationRepository.class);
+        PatientService patientService = new PatientService(repository);
 
-        Assertions.assertTrue(toTest.isPasswordFormatOk(password));*/
+        //then
+        Assertions.assertTrue(patientService.isPasswordFormatOk("Haselko123"));
+        Assertions.assertTrue(patientService.isPasswordFormatOk("Czarnanoc1"));
+        Assertions.assertFalse(patientService.isPasswordFormatOk("cos"));
     }
 
 }
