@@ -14,7 +14,7 @@ emial with confirmation link. If user clicks in confirmation link, the app will 
 database was created. One physiotherapist can have many patients and also can upload rehabilitation tasks for them. One patient can have many tasks. Task entity consist of 
 video and csv file.
 
-##Technologies
+## Technologies
 * Java 13
 * Spring boot
 * Hibernate/JPA
