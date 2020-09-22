@@ -46,8 +46,8 @@ public class TaskController {
 
         byte[] video = taskRepository.findById(id).orElseThrow(FileNotFoundException::new).getVideodata();
         byte [] csv = taskRepository.findById(id).orElseThrow(FileNotFoundException::new).getCsvdata();
-        FileOutputStream videoOutput = new FileOutputStream("C:/Users/Sewuś/Desktop/zapis/video.mp4");
-        FileOutputStream csvOutput = new FileOutputStream("C:/Users/Sewuś/Desktop/zapis/plik.csv");
+        FileOutputStream videoOutput = new FileOutputStream("C:/Users/Seweryn/Projekty/video.mp4");
+        FileOutputStream csvOutput = new FileOutputStream("C:/Users/Seweryn/Projekty/plik.csv");
         csvOutput.write(csv);
         videoOutput.write(video);
         csvOutput.close();
