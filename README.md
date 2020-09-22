@@ -33,6 +33,9 @@ The best way to setup this app is to use docker.
 
 ## Screenshots
 
+### Database schema
 ![Database_schema](./database_giagram.png)
+
+### Postman view
 ![JSON_view](./postman_registration.png)
 
