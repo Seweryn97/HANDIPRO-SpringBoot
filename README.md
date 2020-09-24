@@ -38,6 +38,6 @@ The best way to setup the app is to use docker.
 ![JSON_view](./postman_registration.png)
 
 ### Email verification
-![email](./emial_confirmation.png)
+![email](./email_confirmation.png)
 
 
