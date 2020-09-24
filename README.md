@@ -22,12 +22,12 @@ email with a confirmation link. In order to confirm email address, the user ough
 * Mockito
 
 ## Setup
-The best way to setup this app is to use docker.
+The best way to setup the app is to use docker.
 
-* Download docker from official docker website and install
-* Open Power Shell and move to project's directory
-* Create new docker image with command: docker bulid -f Dockerfile -t [your_image_name]:v1 .
-* Run app with command: docker run -p 8000:8080 [three_leading_numbers_from_img_id]
+* Download docker from the official docker website and install it
+* Open Power Shell and proceed to the project's directory
+* Create a new docker image with the following command: docker bulid -f Dockerfile -t [your_image_name]:v1 .
+* Run the app using the command: docker run -p 8000:8080 [frist three numbers_from the_img_id code]
 
 ## Screenshots
 
